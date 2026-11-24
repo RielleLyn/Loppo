@@ -180,21 +180,21 @@
   const CONFIG = {
     name: "Loaf",                       // his nickname
     age: 24,                            // number of candles on the cake
-    music: "music/day&night.mp3",   // second song (Start-Up OST "Day and Night"). "" = none
+    music: "music/day-and-night.mp3",   // second song (Start-Up OST "Day and Night"). "" = none
     lead: "Three years, a thousand little moments. Here are some of my favorites.",
     years: [
       { label: "Year 1", title: "Our first year together 💗",
         text: "I put together three of my favourite memories from that year.",
         moments: ["Hehehe our first Raya together (Zaman Kurus)", "Celebrated your birthday together for the first time (I was so nervous that time planning all of it out)", "The first time you sent me to the airport (LDR Ngehehe)"],
-        photos: [ { src: "photos/y1-1.jpg", caption: "Our first Raya together" }, { src: "photos/y1-2.jpg", caption: "Your first birthday celebration with me!" }, { src: "photos/y1-3.jpg", caption: "The first time you sent me to the airport." } ] },
+        photos: [ { src: "Photos/y1-1.jpg", caption: "Our first Raya together" }, { src: "Photos/y1-2.jpg", caption: "Your first birthday celebration with me!" }, { src: "Photos/y1-3.jpg", caption: "The first time you sent me to the airport." } ] },
       { label: "Year 2", title: "Growing together",
         text: "Pictures of you from my perspective, and some of my favorite moments from that year.",
         moments: ["Our first trip together", "LDR calls", "You being silly and annoying me"],
-        photos: [ { src: "photos/y2-1.jpg", caption: "Adventure time" }, { src: "photos/y2-2.jpg", caption: "You, Dino & Rabbit" }, { src: "photos/y2-3.jpg", caption: "JB style brader" } ] },
+        photos: [ { src: "Photos/y2-1.jpg", caption: "Adventure time" }, { src: "Photos/y2-2.jpg", caption: "You, Dino & Rabbit" }, { src: "Photos/y2-3.jpg", caption: "JB style brader" } ] },
       { label: "Year 3", title: "Still choosing you",
         text: "You were there for my graduation, and I was there for your birthday. I love you more than ever.",
         moments: ["I", "LOVE", "THIS PICTURES"],
-        photos: [ { src: "photos/y3-1.jpg", caption: "Home is you" }, { src: "photos/y3-2.jpg", caption: "Three years strong" }, { src: "photos/y3-3.jpg", caption: "Us, always" } ] }
+        photos: [ { src: "Photos/y3-1.jpg", caption: "Home is you" }, { src: "Photos/y3-2.jpg", caption: "Three years strong" }, { src: "Photos/y3-3.jpg", caption: "Us, always" } ] }
     ],
     letter: [
       "Happy birthday, my love!",
@@ -452,8 +452,10 @@
     audio.play().then(() => {
       setPlaying(true); $('nowplaying').classList.add('on');
       let v = 0; const fade = setInterval(() => { v = Math.min(v + .05, .85); audio.volume = v; if (v >= .85) clearInterval(fade); }, 120);
-    }).catch(() => {});
+    }).catch(() => { song2 = false; });   // blocked? try again on his next tap or scroll
   }
+  addEventListener('pointerdown', () => { if (!song2 && opened && $('usTop').getBoundingClientRect().top < innerHeight) startSong2(); });
+  audio.addEventListener('error', () => console.warn('Song file not found: ' + CONFIG.music));
   musicBtn.onclick = () => {
     if (audio.paused) { audio.volume = .85; audio.play().then(() => setPlaying(true)).catch(() => {}); } else { audio.pause(); setPlaying(false); }
   };
